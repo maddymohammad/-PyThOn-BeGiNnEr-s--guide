@@ -108,8 +108,10 @@ memory (`is` is `False`).
 
 **26. Small-integer caching.**
 CPython pre-creates and reuses integer objects roughly in the range `-5` to `256`, so two variables
-holding the same small int may share one object and compare `True` with `is`. Outside that range they
-usually don't. It's an implementation detail and varies, so never use `is` to compare integer values —
+holding the same small int share one object and compare `True` with `is`. Outside that range the result
+is context-dependent (equal literals in one code block may be reused and compare `True`, while values
+created separately compare `False`). It's an implementation detail and varies, so never use `is` to
+compare integer values —
 use `==`.
 
 **27. Immutable types.**
