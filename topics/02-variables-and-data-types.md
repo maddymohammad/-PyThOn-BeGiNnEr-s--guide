@@ -193,10 +193,15 @@ print(a is b)   # False — two separate list objects
 print(id(a), id(b))  # different memory addresses
 ```
 
-> **Watch out — small-integer caching:** CPython pre-creates and reuses small integers
-> (roughly `-5` to `256`). So `a = 256; b = 256; a is b` may be `True`, while `a = 257; b = 257; a is b`
-> is `False`. This is an implementation detail — *never* rely on `is` for comparing values. Use `is`
-> only for `None`, `True`, and `False`.
+> **Watch out — small-integer caching:** CPython pre-creates and reuses the small integers from
+> roughly `-5` to `256`, so two variables holding the same small int share one object — `a = 256` and
+> `b = 256` gives `a is b == True` everywhere. Larger ints like `257` are **not** cached, and whether
+> `a is b` is `True` or `False` then depends on context: two `257` literals in the *same* script,
+> function, or one-liner get folded into a single constant (`True`), but two `257`s entered as
+> *separate* lines in the `>>>` shell, or a literal versus a computed `int("257")`, are different
+> objects (`False`). The point isn't the exact rule — it's that identity for equal numbers is an
+> unreliable implementation detail. *Never* use `is` to compare values; use `==`, and reserve `is`
+> for `None`, `True`, and `False`.
 
 ---
 
